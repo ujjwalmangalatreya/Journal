@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/journal")
 public class JournalEntryController {
 
-    private Map<Long, JournalEntry> journalEntryMap = new HashMap<>();
+    private final Map<Long, JournalEntry> journalEntryMap = new HashMap<>();
 
     @GetMapping("/getAllJournal")
     public List<JournalEntry> getAllJournals(){
