@@ -1,5 +1,6 @@
 package com.project.JournalApplication.entity;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 public class JournalEntry {
 
     @Id
-    private String id;
+    private ObjectId id;
     private String title;
     private String content;
     private Date date;
@@ -22,11 +23,11 @@ public class JournalEntry {
         this.date = date;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
