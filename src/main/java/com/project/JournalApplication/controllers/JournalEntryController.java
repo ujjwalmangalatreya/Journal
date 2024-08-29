@@ -24,7 +24,7 @@ public class JournalEntryController {
     private UserService userService;
 
 
-    @GetMapping("/userName")
+    @GetMapping("/{userName}")
     public ResponseEntity<?> getAllJournals(@PathVariable String userName){
         User user = userService.findByUserName(userName);
         List<JournalEntry> allData = user.getJournalEntries();
