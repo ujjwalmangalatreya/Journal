@@ -65,7 +65,7 @@ public class JournalEntryController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @DeleteMapping("/{userName}/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<?> removeJournalEntry(@PathVariable ObjectId id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -78,7 +78,7 @@ public class JournalEntryController {
 
     }
     @PutMapping("/id/{id}")
-    public ResponseEntity<?> editJournalEntry(@PathVariable ObjectId id, @RequestBody JournalEntry journalEntry){
+    public ResponseEntity<?> editJournalEntry(@PathVariable ObjectId id, @RequestBody JournalEntry newJournalEntry){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
@@ -88,8 +88,8 @@ public class JournalEntryController {
             Optional<JournalEntry> journalEntry = journalEntryService.getById(id);
             if(journalEntry.isPresent()){
                 JournalEntry oldJournalEntry = journalEntry.get();
-                oldJournalEntry.setTitle(journalEntry.getTitle() !=null && !journalEntry.getTitle().equals("")? journalEntry.getTitle() : oldJournalEntry.getTitle());
-                oldJournalEntry.setContent(journalEntry.getContent() !=null && !journalEntry.getContent().equals("")? journalEntry.getContent() : oldJournalEntry.getContent());
+                oldJournalEntry.setTitle(newJournalEntry.getTitle() !=null && !newJournalEntry.getTitle().isEmpty() ? newJournalEntry.getTitle() : oldJournalEntry.getTitle());
+                oldJournalEntry.setContent(newJournalEntry.getContent() !=null && !newJournalEntry.getContent().isEmpty() ? newJournalEntry.getContent() : oldJournalEntry.getContent());
                 journalEntryService.saveEntry(oldJournalEntry);
                 return new ResponseEntity<>(oldJournalEntry,HttpStatus.OK);
             }
