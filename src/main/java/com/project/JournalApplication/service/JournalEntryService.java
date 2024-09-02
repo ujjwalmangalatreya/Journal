@@ -5,6 +5,7 @@ import com.project.JournalApplication.entity.User;
 import com.project.JournalApplication.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class JournalEntryService {
             User user = userService.findByUserName(userName);
             JournalEntry savedJournalEntries = journalEntryRepository.save(journalEntry);
             user.getJournalEntries().add(savedJournalEntries);
-            userService.saveEntry(user);
+            userService.saveUser(user);
         }catch (Exception err){
             System.out.println(err);
             throw new RuntimeException("An Error occurred when saving the entry ");
@@ -44,11 +45,24 @@ public class JournalEntryService {
         return journalEntryRepository.findById(id);
     }
 
-    public void deleteById(ObjectId id, String userName){
-        User user = userService.findByUserName(userName);
-        user.getJournalEntries().removeIf(x->x.getId().equals(id));
-        userService.saveEntry(user);
-         journalEntryRepository.deleteById(id);
+    @Transactional
+    public boolean deleteById(ObjectId id, String userName){
+        boolean removed =false;
+        try {
+            User user = userService.findByUserName(userName);
+             removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if(removed){
+                userService.saveUser(user);
+                journalEntryRepository.deleteById(id);
+            }
+        }catch (Exception err) {
+            throw new RuntimeException("An error occurred while deleting the entry"+err);
+        }
+        return removed;
     }
+
+//    public List<JournalEntry> findByUserName(String userName){
+//        return
+//    }
 
 }
