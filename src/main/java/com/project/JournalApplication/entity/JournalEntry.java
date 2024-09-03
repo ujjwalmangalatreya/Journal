@@ -18,7 +18,4 @@ public class JournalEntry {
     private ObjectId id;
     private String title;
     private String content;
-
-
-
 }
